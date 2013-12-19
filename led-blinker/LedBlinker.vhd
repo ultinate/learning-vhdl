@@ -33,7 +33,6 @@ architecture LedBlinker_arch of LedBlinker is
 	signal led_random : std_logic_vector (width-1 downto 0);
 	
 	type state_type is (state_count, state_shift, state_random, state_none);
-	-- TODO: solve "Warning (332125): Found combinational loop of 2 nodes"
 	signal current_state, state_temp : state_type := state_none;
 
 	component LB_Counter
@@ -61,17 +60,15 @@ architecture LedBlinker_arch of LedBlinker is
 begin
 
 	-- state machine process
-	process(btn, current_state)
+	process(btn)
 	begin
-		-- switch mode if button K4 is pressed (active-low)
+		-- switch mode if a button is pressed (active-low)
 		if btn(0) = '0' then
 			state_temp <= state_count;
 		elsif btn(1) = '0' then
 			state_temp <= state_shift;
 		elsif btn(3) = '0' then
 			state_temp <= state_random;
-		else
-			state_temp <= current_state; -- default: stay
 		end if;
 	end process;
 	
