@@ -11,11 +11,15 @@ use ieee.numeric_std.all;
 --------------------------------------
 
 entity LedBlinker is
+	generic ( 
+		width : integer :=  8; 
+		btn_width : integer := 4
+	);
 port(
 	clk : in std_logic;
 	sys_reset : in std_logic;
-	btn : in std_logic_vector (3 downto 0);
-	led : out std_logic_vector (7 downto 0)
+	btn : in std_logic_vector (btn_width-1 downto 0);
+	led : out std_logic_vector (width-1 downto 0)
 );
 end LedBlinker;
 
@@ -23,33 +27,34 @@ end LedBlinker;
 
 architecture LedBlinker_arch of LedBlinker is
 
-	signal led_temp : std_logic_vector (7 downto 0);
-	signal led_counter : std_logic_vector (7 downto 0);
-	signal led_shift : std_logic_vector (7 downto 0);
-	signal led_random : std_logic_vector (7 downto 0);
+	signal led_temp : std_logic_vector (width-1 downto 0);
+	signal led_counter : std_logic_vector (width-1 downto 0);
+	signal led_shift : std_logic_vector (width-1 downto 0);
+	signal led_random : std_logic_vector (width-1 downto 0);
 	
 	type state_type is (state_count, state_shift, state_random, state_none);
+	-- TODO: solve "Warning (332125): Found combinational loop of 2 nodes"
 	signal current_state, state_temp : state_type := state_none;
 
 	component LB_Counter
 		port (
 			clk : in std_logic;
 			sys_reset : in std_logic;
-			led : out std_logic_vector (7 downto 0)
+			led : out std_logic_vector (width-1 downto 0)
 			);
 	end component;
 	component LB_Shift
 		port (
 			clk : in std_logic;
 			sys_reset : in std_logic;
-			led : out std_logic_vector (7 downto 0)
+			led : out std_logic_vector (width-1 downto 0)
 			);
 	end component;
 	component LB_Random
 		port (
 			clk : in std_logic;
 			sys_reset : in std_logic;
-			led : out std_logic_vector (7 downto 0)
+			led : out std_logic_vector (width-1 downto 0)
 			);
 	end component;
 		
@@ -58,7 +63,6 @@ begin
 	-- state machine process
 	process(btn, current_state)
 	begin
-		state_temp <= current_state;
 		-- switch mode if button K4 is pressed (active-low)
 		if btn(0) = '0' then
 			state_temp <= state_count;
@@ -66,8 +70,12 @@ begin
 			state_temp <= state_shift;
 		elsif btn(3) = '0' then
 			state_temp <= state_random;
+		else
+			state_temp <= current_state; -- default: stay
 		end if;
 	end process;
+	
+	-- update state
 	current_state <= state_temp;
 
 	-- LED logic components 

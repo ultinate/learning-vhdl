@@ -26,7 +26,8 @@ architecture LB_Shift_arch of LB_Shift is
 	constant CLK_COUNT_MAX : integer := 50000000/2 - 1; -- 50MHz
 	signal clk_cnt : unsigned (24 downto 0);
 	signal direction : std_logic := '1';
-	signal led_temp : std_logic_vector (7 downto 0):= x"01";
+	-- TODO: make this a bit_vector, so we can shift using sll, srl
+	signal led_temp : std_logic_vector (width-1 downto 0):= x"01";
 	
 begin
 	
@@ -49,9 +50,9 @@ begin
 			if clk_cnt = CLK_COUNT_MAX then
 				clk_cnt <= (others => '0');
 				if direction = '1' then
-					led_temp <= led_temp(6 downto 0) & led_temp(7); -- shift left
+					led_temp <= led_temp(width-2 downto 0) & led_temp(width-1); -- shift left by one
 				else
-					led_temp <= led_temp(0) & led_temp(7 downto 1); -- shift right
+					led_temp <= led_temp(0) & led_temp(width-1 downto 1); -- shift right by one
 				end if;
 			else
 				clk_cnt <= clk_cnt + 1;

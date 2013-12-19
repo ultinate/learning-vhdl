@@ -11,10 +11,11 @@ use ieee.numeric_std.all;
 --------------------------------------
 
 entity LB_Counter is
+	generic ( width : integer :=  8 );
 port(
 	clk : in std_logic;
 	sys_reset : in std_logic;
-	led : out std_logic_vector (7 downto 0)
+	led : out std_logic_vector (width-1 downto 0)
 );
 end LB_Counter;
 
@@ -25,7 +26,7 @@ architecture LB_Counter_arch of LB_Counter is
 	constant CLK_COUNT_MAX : integer := 50000000/2 - 1; -- 50MHz
 	constant COUNT_MAX : std_logic_vector := x"aa"; -- 2^8
 	signal clk_cnt : unsigned (24 downto 0);
-	signal cnt : std_logic_vector (7 downto 0);
+	signal cnt : std_logic_vector (width-1 downto 0);
 	
 begin
 	

@@ -28,15 +28,15 @@ architecture LB_Random_arch of LB_Random is
 	signal clk_cnt : unsigned (24 downto 0);
 	signal random_num : std_logic_vector (width-1 downto 0);
 	signal led_temp : std_logic_vector (width-1 downto 0);
-	signal enable : std_logic := '1';
-	signal reset : std_logic := '0';
+	constant enable : std_logic := '1';
+	constant reset : std_logic := '0';
 
 	component lfsr is
 		port (
-			enable : in  std_logic;                    -- Enable counting
-			clk    : in  std_logic;                    -- Input rlock
-			reset  : in  std_logic;                    -- Input reset
-			cout   : out std_logic_vector (7 downto 0) -- Output of the counter
+			enable : in  std_logic;                    			-- Enable counting
+			clk    : in  std_logic;                    			-- Input rlock
+			reset  : in  std_logic;                    			-- Input reset
+			cout   : out std_logic_vector (width-1 downto 0) 	-- Output of the counter
 		);
 	end component;
 	
