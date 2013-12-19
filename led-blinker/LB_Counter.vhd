@@ -3,8 +3,8 @@
 -- 
 -- Binary count from 0 to 2^8-1 using LEDs
 -- 
--- author: Nathanael Wettstein
--- update: 2013-12-19
+-- author:  Nathanael Wettstein
+-- updated: 2013-12-19
 --------------------------------------
 
 library ieee;

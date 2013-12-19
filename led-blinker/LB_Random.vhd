@@ -3,8 +3,8 @@
 -- 
 -- Display pseudo-random sequence of LED pattern
 -- 
--- author: Nathanael Wettstein
--- update: 2013-12-19
+-- author:  Nathanael Wettstein
+-- updated: 2013-12-19
 --------------------------------------
 
 library ieee;

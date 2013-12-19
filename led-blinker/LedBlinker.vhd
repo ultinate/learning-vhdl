@@ -3,8 +3,8 @@
 -- 
 -- Make LEDs blink using various logic modules
 -- 
--- author: Nathanael Wettstein
--- update: 2013-12-19
+-- author:  Nathanael Wettstein
+-- updated: 2013-12-19
 --------------------------------------
 
 library ieee;
@@ -66,6 +66,7 @@ begin
 	process(btn)
 	begin
 		-- switch mode if a button is pressed (active-low)
+		-- TODO: have a conditional assignment
 		if btn(0) = '0' then
 			state_temp <= state_count;
 		elsif btn(1) = '0' then

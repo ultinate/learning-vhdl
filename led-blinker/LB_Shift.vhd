@@ -3,8 +3,8 @@
 -- 
 -- Shift one glowing LED from left to right and back
 -- 
--- author: Nathanael Wettstein
--- update: 2013-12-19
+-- author:  Nathanael Wettstein
+-- updated: 2013-12-19
 --------------------------------------
 
 library ieee;
@@ -30,7 +30,7 @@ architecture LB_Shift_arch of LB_Shift is
 	signal clk_cnt : unsigned (24 downto 0);
 	signal direction : std_logic := '1';
 	-- TODO: make this a bit_vector, so we can shift using sll, srl
-	signal led_temp : std_logic_vector (width-1 downto 0):= x"01";
+	signal led_temp : std_logic_vector (width-1 downto 0):= x"01"; std_logic_unsigned
 	
 begin
 	

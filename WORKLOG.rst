@@ -15,5 +15,5 @@ Project: LED Blinker
 * h 12: Use buttons to switch states
 * h 14: Try to get ModelSim simulation running
 * h 18: Update documentation, clean code, set up github project
-* h 24: ..
+* h 24: Debug
 
