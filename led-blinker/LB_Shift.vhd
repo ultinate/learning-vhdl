@@ -1,7 +1,10 @@
 --------------------------------------
--- LED Blinker: Shift
+-- LED Blinker: Shift module
 -- 
 -- Shift one glowing LED from left to right and back
+-- 
+-- author: Nathanael Wettstein
+-- update: 2013-12-19
 --------------------------------------
 
 library ieee;

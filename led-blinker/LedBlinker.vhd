@@ -2,6 +2,9 @@
 -- LED Blinker
 -- 
 -- Make LEDs blink using various logic modules
+-- 
+-- author: Nathanael Wettstein
+-- update: 2013-12-19
 --------------------------------------
 
 library ieee;

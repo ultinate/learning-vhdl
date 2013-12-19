@@ -1,7 +1,7 @@
 -------------------------------------------------------
 -- Design Name  : lfsr
 -- File Name    : lfsr.vhd
--- Function     : Linear feedback shift register
+-- Function     : 8-bit linear feedback shift register
 -- Coder        : Deepak Kumar Tala (Verilog)
 -- Translator   : Alexander H Pham (VHDL)
 -- 
