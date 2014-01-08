@@ -93,7 +93,6 @@ begin
 	U3: LB_Random port map (clk => slow_clk, sys_reset => sys_reset, led => led_random);
 	
 	-- generate slow clock for visible LED update
-	-- TODO: replace by PLL
 	process(clk, slow_clk, clk_cnt)
 	begin
 		if rising_edge(clk) then
