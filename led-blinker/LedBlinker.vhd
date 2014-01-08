@@ -30,13 +30,18 @@ end LedBlinker;
 
 architecture LedBlinker_arch of LedBlinker is
 
-	signal led_temp : std_logic_vector (width-1 downto 0);
 	signal led_counter : std_logic_vector (width-1 downto 0);
 	signal led_shift : std_logic_vector (width-1 downto 0);
 	signal led_random : std_logic_vector (width-1 downto 0);
 	
-	type state_type is (state_count, state_shift, state_random, state_none);
-	signal current_state, state_temp : state_type := state_none;
+	constant CLK_COUNT_MAX : integer := 50000000/4 - 1; -- clk at 50MHz, slow_clk at 4 Hz
+	signal clk_cnt : unsigned (24 downto 0);
+	signal slow_clk : std_logic;
+	
+	signal btn0_last : std_logic;
+	
+	type state_type is (state_count, state_shift, state_random);
+	signal state : state_type;
 
 	component LB_Counter
 		port (
@@ -59,50 +64,63 @@ architecture LedBlinker_arch of LedBlinker is
 			led : out std_logic_vector (width-1 downto 0)
 			);
 	end component;
-		
+
 begin
 
 	-- state machine process
-	process(btn)
+	process(clk)
 	begin
-		-- switch mode if a button is pressed (active-low)
-		-- TODO: have a conditional assignment
-		if btn(0) = '0' then
-			state_temp <= state_count;
-		elsif btn(1) = '0' then
-			state_temp <= state_shift;
-		elsif btn(3) = '0' then
-			state_temp <= state_random;
+		if rising_edge(clk) then
+			if btn(0) = '0' and btn0_last = '1' then
+				case state is
+					when state_count => 
+						state <= state_shift;
+					when state_shift =>
+						state <= state_random;
+					when state_random =>
+						state <= state_count;
+				end case;
+			else
+				state <= state;
+			end if;
+			btn0_last <= btn(0);
+		end if;
+	end process;
+
+	-- LED logic components 
+	U1: LB_Counter port map (clk => slow_clk, sys_reset => sys_reset, led => led_counter);
+	U2: LB_Shift port map (clk => slow_clk, sys_reset => sys_reset, led => led_shift);
+	U3: LB_Random port map (clk => slow_clk, sys_reset => sys_reset, led => led_random);
+	
+	-- generate slow clock for visible LED update
+	-- TODO: replace by PLL
+	process(clk, slow_clk, clk_cnt)
+	begin
+		if rising_edge(clk) then
+			if clk_cnt = CLK_COUNT_MAX then
+				clk_cnt <= (others => '0');
+				slow_clk <= not slow_clk;
+			else
+				clk_cnt <= clk_cnt + 1;
+			end if;
 		end if;
 	end process;
 	
-	-- update state
-	current_state <= state_temp;
-
-	-- LED logic components 
-	U1: LB_Counter port map (clk => clk, sys_reset => sys_reset, led => led_counter);
-	U2: LB_Shift port map (clk => clk, sys_reset => sys_reset, led => led_shift);
-	U3: LB_Random port map (clk => clk, sys_reset => sys_reset, led => led_random);
-	
-	-- update process
-	process(clk, sys_reset)
+	-- LED update process
+	process(clk)
 	begin
-		-- perform update step
 		if rising_edge(clk) then
-			case current_state is
+			case state is
 				when state_count =>
-					led_temp <= led_counter;
+					led <= led_counter;
 				when state_shift =>
-					led_temp <= led_shift;
+					led <= led_shift;
 				when state_random =>
-					led_temp <= led_random;
+					led <= led_random;
 				when others =>
-					led_temp <= (others => '0');
+					led <= (others => '0');
 			end case;
 		end if;
 	end process;
-
-	-- update LED
-	led <= led_temp;
 	
 end LedBlinker_arch;
