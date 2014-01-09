@@ -32,7 +32,6 @@ architecture LB_Shift_arch of LB_Shift is
 begin
 	
 	process(clk, sys_reset, led_temp)
-		variable direction_temp : std_logic := '0';
 	begin
 		
 		-- reset counter and direction
@@ -43,13 +42,12 @@ begin
 		-- shift our bit left or right
 		elsif rising_edge(clk) then
 		
-			if (led_temp = x"80" and direction = '1') or
-					(led_temp = x"01" and direction = '0') then
-				direction_temp := not direction;
-				direction <= direction_temp;
+			if (led_temp = "01000000" and direction = '1') or
+					(led_temp = "00000010" and direction = '0') then
+				direction <= not direction;
 			end if;
 			
-			if direction_temp = '1' then
+			if direction = '1' then
 				led_temp <= led_temp(width-2 downto 0) & led_temp(width-1); -- shift left by one
 			else
 				led_temp <= led_temp(0) & led_temp(width-1 downto 1); -- shift right by one
@@ -58,8 +56,8 @@ begin
 		end if;
 	
 	end process;
-
+	
 	-- update LED
 	led <= led_temp;
-		
+	
 end LB_Shift_arch;
