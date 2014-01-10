@@ -213,3 +213,13 @@ pip-log.txt
 
 #Mr Developer
 .mr.developer.cfg
+
+
+#################
+## Quartus II and ModelSim
+#################
+
+db/
+incremental_db/
+output_files/
+rtl_work/

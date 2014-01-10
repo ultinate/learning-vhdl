@@ -2,11 +2,12 @@
 -- Testbench for LB_Shift
 -- 
 -- author:  Nathanael Wettstein
--- updated: 2014-01-09
+-- updated: 2014-01-10
 --------------------------------------
 
 library ieee;
 use ieee.std_logic_1164.all;
+use work.txt_util.all;
 
 --------------------------------------
 
@@ -52,37 +53,38 @@ begin
 		
 		-- assert initial state without reset
 		jump_n_clocks(1);
-		assert ( led = "00000010" ) report "init_01" severity error;
+		assert ( led = "00000010" ) report "init01 mismatch: led is " & str(led) severity error;
 		jump_n_clocks(1);
 		-- assert initial state with reset
 		sys_reset <= '0';
 		jump_n_clocks(1);
-		assert ( led = x"01" ) report "init_02" severity error;
+		assert ( led = x"01" ) report "init02 mismatch: led is " & str(led) severity error;
 		jump_n_clocks(1);
-		assert ( led = x"01" ) report "init_03" severity error;
+		assert ( led = x"01" ) report "init03 mismatch: led is " & str(led) severity error;
 		sys_reset <= '1';
 		
 		-- Run for a while, assert a few examples
 		jump_n_clocks(1);
-		assert ( led = "00000010" ) report "loop_01" severity error;
+		assert ( led = "00000010" ) report "run01 mismatch: led is " & str(led) severity error;
 		jump_n_clocks(1);
-		assert ( led = "00000100" ) report "loop_02" severity error;
+		assert ( led = "00000100" ) report "run02 mismatch: led is " & str(led) severity error;
 		jump_n_clocks(5);
-		assert ( led = "10000000" ) report "loop_03" severity error;
+		assert ( led = "10000000" ) report "run03 mismatch: led is " & str(led) severity error;
 		jump_n_clocks(1);
-		assert ( led = "01000000" ) report "loop_04" severity error;
+		assert ( led = "01000000" ) report "run04 mismatch: led is " & str(led) severity error;
 		jump_n_clocks(6);
-		assert ( led = "00000001" ) report "loop_04" severity error;
+		assert ( led = "00000001" ) report "run05 mismatch: led is " & str(led) severity error;
 		jump_n_clocks(1);
-		assert ( led = "00000010" ) report "loop_04" severity error;
+		assert ( led = "00000010" ) report "run06 mismatch: led is " & str(led) severity error;
 		jump_n_clocks(5);
 		sys_reset <= '0';
 		jump_n_clocks(1);
-		assert ( led = "00000001" ) report "loop_05" severity error;
+		assert ( led = "00000001" ) report "run07 mismatch: led is " & str(led) severity error;
 		jump_n_clocks(1);
-		assert ( led = "00000001" ) report "loop_05" severity error;
+		assert ( led = "00000001" ) report "run08 mismatch: led is " & str(led) severity error;
 		
-		assert false report "----- END OF SIMULATION (this is not a failure) -----" severity failure;
+		-- End simulation
+		assert false report "----- END OF SIMULATION (this is not a failure) ----- " severity failure;
 		
 	end process stimulus;
 end architecture testbench1;
