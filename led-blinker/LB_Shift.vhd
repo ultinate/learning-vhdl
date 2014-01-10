@@ -22,7 +22,7 @@ port(
 );
 end LB_Shift;
 
-----
+--------------------------------------
 
 architecture LB_Shift_arch of LB_Shift is
 
